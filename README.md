@@ -20,22 +20,9 @@ The PoinZ Client is built with [ReactJS](https://facebook.github.io/react/) and 
 The PoinZ Backend is a nodeJS [express](http://expressjs.com/) server.
 
 
-## Contribute
-
-### Prerequisites
-
-* You have `nodeJS` installed at v4.2.0+ and `npm` at v2.0.0+.
-* You are familiar with `npm`
-* You are familiar with `git`
-* You know JavaScript (duh :-) )
-* You are familiar with- or eager to learn `react`
-* You are familiar with- or eager to learn `redux`
-
 ### Style
 
 Try to adhere to the [airbnb style guide](https://github.com/airbnb/javascript).
-
-### Development
 
 ### Prerequisites
 
@@ -57,7 +44,6 @@ Start the client-serving in dev mode via webpack-dev-server
 
 Then you can open the app at http://localhost:9000/webpack-dev-server/
 
-
 ## Build
 
 Our build produces a docker image that contains nodejs and our poinz server.
@@ -75,11 +61,43 @@ We need all dependencies of the server and the client installed.
 
 In project root, run
 
-```
-$ npm run build
+```bash
+npm run build
 ```
 
 This will copy all backend and client files to `deploy/`. 
 And then start the docker build.
 
-See [Deployment](DEPLOYMENT.md) for more information.
+## Deployment
+
+PoinZ is currently deployed on a free-tier heroku dyno. (currently without persistent room storage)...
+
+### Heroku deployment
+
+* Build Docker image with:
+
+```bash
+npm install
+npm run build
+```
+
+* Login to Heroku with:
+
+```bash
+heroku auth:login
+sleep 60
+heroku container:login
+docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
+```
+
+* Push image to heroku registry:
+
+```bash
+heroku container:push web -a poinz-dk
+```
+
+* Release new image:
+
+```bash
+heroku container:release web -a poinz-dk
+```
